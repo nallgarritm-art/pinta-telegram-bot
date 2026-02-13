@@ -7,8 +7,7 @@ from telegram.ext import (
 )
 import random
 
-TOKEN = "8579362452:AAGCYcllDu5ULAM6R4-LBZgNRsjGuuyqbBI
-"
+TOKEN = "8579362452:AAGCYcllDu5ULAM6R4-LBZgNRsjGuuyqbBI"
 YANDEX_LINK = "https://yandex.ru/maps/org/pinta/88086573918/reviews/?add-review=true&ll=34.094484%2C44.927617&z=21"
 
 reviews = {
@@ -76,4 +75,5 @@ def main():
     app.run_polling()
 
 if name == "__main__":
+
     main()
