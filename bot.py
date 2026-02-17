@@ -33,7 +33,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(
         f"Вот вариант отзыва:\n\n{review}",
-        reply_markup=keyboard
+        reply_markup=keyboard,
+        parse_mode="Markdown"
     )
 
 async def new_review(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -47,7 +48,8 @@ async def new_review(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.callback_query.answer()
     await update.callback_query.edit_message_text(
         f"Вот другой вариант:\n\n{review}",
-        reply_markup=keyboard
+        reply_markup=keyboard,
+        parse_mode="Markdown"
     )
 
 # ===== ЗАПУСК =====
