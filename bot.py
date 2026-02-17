@@ -11,7 +11,7 @@ from telegram.ext import (
 
 # ===== НАСТРОЙКИ =====
 
-YANDEX_REVIEW_URL = "yandexmaps://maps.yandex.ru/?oid=88086573918"
+YANDEX_APP_URL = "yandexmaps://maps.yandex.ru/?oid=88086573918"
 
 REVIEWS = [
     "Отличный пивной магазин! Большой выбор, всё свежее 🍺",
