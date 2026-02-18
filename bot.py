@@ -13,24 +13,85 @@ from telegram.ext import (
 TOKEN = os.getenv("BOT_TOKEN")
 
 STORES = {
-    "trubochenko": {
-        "title": "🍺 ПИНТА — Трубоченко",
-        "app_url": "https://yandex.ru/maps/org/88086573918/reviews",
-        "web_url": "https://yandex.ru/maps/org/pinta/88086573918/?add-review=true",
+    "balaklavskaya": {
+        "title": "🍺 ПИНТА — Балаклавская",
+        "url": "https://yandex.ru/maps/org/ID/reviews",
         "reviews": [
-            "Отличный магазин на Трубоченко, всегда свежее пиво и приятное обслуживание.",
-            "Хороший выбор напитков, часто захожу именно в эту ПИНТУ.",
-            "Уютный магазин, персонал вежливый, ассортимент радует."
+            "Отличная ПИНТА на Балаклавской, всегда свежее пиво и приятный персонал.",
+            "Хороший ассортимент и быстрое обслуживание, рекомендую.",
+            "Чисто, уютно, приятно заходить."
         ]
     },
-    "konnoi": {
-        "title": "🍺 ПИНТА — 1-я Конной армии",
-        "app_url": "https://yandex.ru/maps/org/pinta/22400636893/reviews/?add-review=true&ll=34.074024%2C44.911213&tab=reviews&z=15",
-        "web_url": "https://yandex.ru/maps/org/pinta/22400636893/?add-review=true",
+    "kovylnaya": {
+        "title": "🍺 ПИНТА — Ковыльная",
+        "url": "https://yandex.ru/maps/org/ID/reviews",
         "reviews": [
-            "Отличная ПИНТА на 1-й Конной армии, всегда всё свежее.",
-            "Хорошее обслуживание и большой выбор пива.",
+            "Отличный магазин на Ковыльной, хороший выбор напитков.",
+            "Персонал вежливый, пиво всегда свежее.",
             "Приятное место, захожу регулярно."
+        ]
+    },
+    "gagarina": {
+        "title": "🍺 ПИНТА — Гагарина",
+        "url": "https://yandex.ru/maps/org/ID/reviews",
+        "reviews": [
+            "Хорошая ПИНТА на Гагарина, удобное расположение.",
+            "Большой выбор, всё аккуратно и чисто.",
+            "Обслуживание на уровне."
+        ]
+    },
+    "kievskaya": {
+        "title": "🍺 ПИНТА — Киевская",
+        "url": "https://yandex.ru/maps/org/ID/reviews",
+        "reviews": [
+            "Отличный магазин на Киевской, приятно заходить.",
+            "Всегда свежее пиво и хороший сервис.",
+            "Рекомендую эту точку."
+        ]
+    },
+    "leksina": {
+        "title": "🍺 ПИНТА — Лексина",
+        "url": "https://yandex.ru/maps/org/ID/reviews",
+        "reviews": [
+            "Удобная ПИНТА рядом с домом, всё нравится.",
+            "Хороший выбор и вежливый персонал.",
+            "Часто захожу, всегда доволен."
+        ]
+    },
+    "danilova": {
+        "title": "🍺 ПИНТА — Данилова",
+        "url": "https://yandex.ru/maps/org/ID/reviews",
+        "reviews": [
+            "Отличный магазин на Данилова, приятная атмосфера.",
+            "Всегда свежее пиво и быстрое обслуживание.",
+            "Хорошее место."
+        ]
+    },
+    "vorovskogo": {
+        "title": "🍺 ПИНТА — Воровского",
+        "url": "https://yandex.ru/maps/org/ID/reviews",
+        "reviews": [
+            "Хорошая ПИНТА на Воровского, всё стабильно.",
+            "Ассортимент радует, персонал вежливый.",
+            "Захожу регулярно."
+        ]
+    },
+    "polevaya": {
+        "title": "🍺 ПИНТА — Полевая",
+        "url": "https://yandex.ru/maps/org/ID/reviews",
+        "reviews": [
+            "Отличная точка на Полевой, чисто и аккуратно.",
+            "Приятные продавцы и хороший выбор.",
+            "Рекомендую."
+        ]
+    },
+    "molodezhnoe": {
+        "title": "🍺 ПИНТА — Молодёжное",
+        "url": "https://yandex.ru/maps/org/ID/reviews",
+        "reviews": [
+            "Хороший магазин в Молодёжном, удобно расположен.",
+            "Всегда свежее пиво и нормальные цены.",
+            "Приятное обслуживание."
         ]
     }
 }
@@ -50,10 +111,9 @@ def stores_keyboard():
 
 def review_keyboard(store):
     return InlineKeyboardMarkup([
-        [InlineKeyboardButton("📍 Открыть в Яндекс Картах", url=store["app_url"])],
-        [InlineKeyboardButton("🌐 Если не открылось — через браузер", url=store["web_url"])],
-        [InlineKeyboardButton("🔄 Другой вариант", callback_data="new_review")],
-        [InlineKeyboardButton("🏪 Выбрать другой магазин", callback_data="change_store")]
+        [InlineKeyboardButton("📍 Открыть Яндекс Карты", url=store["url"])],
+        [InlineKeyboardButton("🔄 Другой отзыв", callback_data="new_review")],
+        [InlineKeyboardButton("🏪 Выбрать другой магазин", callback_data="back_to_stores")]
     ])
 
 # ================= ЛОГИКА =================
@@ -74,8 +134,8 @@ async def choose_store(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await send_review(query, context)
 
 async def send_review(update, context):
-    store_key = context.user_data.get("store")
-    store = STORES.get(store_key)
+    store_key = context.user_data["store"]
+    store = STORES[store_key]
 
     review = random.choice(store["reviews"])
 
@@ -85,27 +145,20 @@ async def send_review(update, context):
         f"```\n{review}\n```"
     )
 
-    if hasattr(update, "message"):
-        await update.message.reply_text(
-            text,
-            reply_markup=review_keyboard(store),
-            parse_mode="Markdown"
-        )
-    else:
-        await update.edit_message_text(
-            text,
-            reply_markup=review_keyboard(store),
-            parse_mode="Markdown"
-        )
+    await update.edit_message_text(
+        text,
+        reply_markup=review_keyboard(store),
+        parse_mode="Markdown"
+    )
 
 async def new_review(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.callback_query.answer()
     await send_review(update.callback_query, context)
 
-async def change_store(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def back_to_stores(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.callback_query.answer()
     await update.callback_query.edit_message_text(
-        "Выбери другой магазин 👇",
+        "Выбери магазин ПИНТА 👇",
         reply_markup=stores_keyboard()
     )
 
@@ -117,7 +170,7 @@ def main():
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CallbackQueryHandler(choose_store, pattern="^store:"))
     app.add_handler(CallbackQueryHandler(new_review, pattern="new_review"))
-    app.add_handler(CallbackQueryHandler(change_store, pattern="change_store"))
+    app.add_handler(CallbackQueryHandler(back_to_stores, pattern="back_to_stores"))
 
     print("✅ Bot started")
     app.run_polling()
