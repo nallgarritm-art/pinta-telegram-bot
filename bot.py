@@ -11,7 +11,7 @@ from telegram.ext import (
 
 # ===== НАСТРОЙКИ =====
 
-YANDEX_APP_URL = "yandexmaps://maps.yandex.ru/?oid=88086573918"
+YANDEX_REVIEW_URL = "https://yandex.com/maps/org/pinta/88086573918/?add-review=true&ll=34.094317%2C44.927680&z=17"
 
 REVIEWS = [
     "Отличный пивной магазин! Большой выбор, всё свежее 🍺",
@@ -92,7 +92,7 @@ async def new_review(update: Update, context: ContextTypes.DEFAULT_TYPE):
     review = random.choice(REVIEWS)
 
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("⭐ Оставить отзыв", app=YANDEX_APP_URL)],
+        [InlineKeyboardButton("⭐ Оставить отзыв", url=YANDEX_REVIEW_URL)],
         [InlineKeyboardButton("🔄 Ещё вариант", callback_data="new_review")]
     ])
 
