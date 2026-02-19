@@ -136,10 +136,18 @@ def review_keyboard(store):
 # ================= ЛОГИКА =================
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(
-        "Выбери магазин ПИНТА 👇",
-        reply_markup=stores_keyboard()
-    )
+    context.user_data.clear()  # очищаем прошлый выбор
+    await show_stores(update, context)
+    if update.message:
+        await update.message.reply_text(
+            "Выбери магазин ПИНТА 👇",
+            reply_markup=stores_keyboard()
+        )
+    else:
+        await update.callback_query.edit_message_text(
+            "Выбери магазин ПИНТА 👇",
+            reply_markup=stores_keyboard()
+        )
 
 async def choose_store(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
@@ -174,9 +182,8 @@ async def new_review(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def back_to_stores(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.callback_query.answer()
-    await update.callback_query.edit_message_text(
-        "Выбери магазин ПИНТА 👇",
-        reply_markup=stores_keyboard()
+    context.user_data.clear()
+    await show_stores(update, context)
     )
 
 # ================= ЗАПУСК =================
