@@ -738,8 +738,10 @@ async def new_review(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def back_to_stores(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.callback_query.answer()
-    context.user_data.clear()
-    await show_stores(update, context)
+    await update.callback_query.edit_message_text(
+        "Выбери магазин ПИНТА 👇"
+        replay_markup=stores_keyboard()
+    )
 
 # ================= ЗАПУСК =================
 
