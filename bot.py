@@ -739,7 +739,7 @@ async def new_review(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def back_to_stores(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.callback_query.answer()
     await update.callback_query.edit_message_text(
-        "Выбери магазин ПИНТА 👇"
+        "Выбери магазин ПИНТА 👇",
         replay_markup=stores_keyboard()
     )
 
