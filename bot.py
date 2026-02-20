@@ -712,22 +712,7 @@ async def send_review(update, context):
     store_key = context.user_data["store"]
     store = STORES[store_key]
 
-    used = context.user_data.get("used_reviews", [])
-
-    available = [
-        r for r in store["reviews"]
-        if r not in used
-    ]
-
-    # если отзывы закончились — начинаем заново
-    if not available:
-        used = []
-        available = store["reviews"]
-
-    review = random.choice(available)
-    used.append(review)
-
-    context.user_data["used_reviews"] = used
+    review = random.choice(store["reviews"])
 
     text = (
         f"{store['title']}\n\n"
