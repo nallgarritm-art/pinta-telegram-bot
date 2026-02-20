@@ -717,12 +717,6 @@ async def send_review(update, context):
         parse_mode="Markdown"
     )
 
-    await update.edit_message_text(
-        text,
-        reply_markup=review_keyboard(store),
-        parse_mode="Markdown"
-    )
-
 async def new_review(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.callback_query.answer()
     await send_review(update.callback_query, context)
