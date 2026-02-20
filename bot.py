@@ -686,7 +686,6 @@ def review_keyboard(store):
 # ================= ЛОГИКА =================
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    context.user_data.clear()  # очищаем прошлый выбор
     await show_stores(update, context)
     if update.message:
         await update.message.reply_text(
