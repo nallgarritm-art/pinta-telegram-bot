@@ -686,18 +686,10 @@ def review_keyboard(store):
 # ================= ЛОГИКА =================
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await show_stores(update, context)
-    if update.message:
-        await update.message.reply_text(
-            "Выбери магазин ПИНТА 👇",
-            reply_markup=stores_keyboard()
-        )
-    else:
-        await update.callback_query.edit_message_text(
-            "Выбери магазин ПИНТА 👇",
-            reply_markup=stores_keyboard()
-        )
-
+    await update.message.replay_text(
+        "Выбери магазин ПИНТА 👇",
+        replay_murkup=stores_keyboard()
+    )
 async def choose_store(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
