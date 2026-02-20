@@ -712,12 +712,33 @@ async def send_review(update, context):
     store_key = context.user_data["store"]
     store = STORES[store_key]
 
-    review = random.choice(store["reviews"])
+    used = context.user_data.get("used_reviews", [])
+
+    available = [
+        r for r in store["reviews"]
+        if r not in used
+    ]
+
+    # если отзывы закончились — начинаем заново
+    if not available:
+        used = []
+        available = store["reviews"]
+
+    review = random.choice(available)
+    used.append(review)
+
+    context.user_data["used_reviews"] = used
 
     text = (
         f"{store['title']}\n\n"
         "Скопируй отзыв одним нажатием 👇\n\n"
         f"```\n{review}\n```"
+    )
+
+    await update.edit_message_text(
+        text,
+        reply_markup=review_keyboard(store),
+        parse_mode="Markdown"
     )
 
     await update.edit_message_text(
@@ -734,7 +755,6 @@ async def back_to_stores(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.callback_query.answer()
     context.user_data.clear()
     await show_stores(update, context)
-    )
 
 # ================= ЗАПУСК =================
 
